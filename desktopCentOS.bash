@@ -38,7 +38,7 @@ yum-config-manager  \
     -y \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install docker-ce docker-ce-cli containerd.io
+sudo yum -y install docker-ce docker-ce-cli containerd.io
 
 snap install kotlin --classic
 snap install code --classic
