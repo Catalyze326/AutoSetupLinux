@@ -4,24 +4,16 @@ if [[ $EUID -ne 0 ]]; then echo "This script must be run as root" ;exit 1; fi
 apt -y update
 apt -y upgrade
 apt -y install git
-apt -y install mysql-server
 apt -y install wget
 apt -y install curl
 apt -y install python3-pip
-apt -y install python2-pip
 apt -y install default-jdk
-apt -y install php
-apt -y install apache2
 apt -y install firefox
-apt -y install openssh-server
-apt -y install kvm
 apt -y install vim
 apt -y install virtualbox
 apt -y install net-tools
 apt -y install gnome-tweak-tool
-apt -y install chrome-gnome-shell
-apt -y install gnome-tweak-tool
-yum -y install cifs-utils
+apt -y install cifs-utils
 
 # Install docker
 apt -y remove docker docker-engine docker.io containerd runc
@@ -49,6 +41,7 @@ gsettings set org.gnome.shell.extensions.dash-to-dock min-alpha 0
 gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0
 gsettings set org.gnome.shell.extensions.dash-to-dock show-apps-at-top false
 
+snap refresh
 snap install kotlin --classic
 snap install code --classic
 snap install android-studio --classic
@@ -65,18 +58,6 @@ code --install-extension ms-python.python
 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 dpkg -i google-chrome-stable_current_amd64.deb
-
-echo would you like to install professional jet brains products y/n
-read -r professional
-if [ "$professional" == y ]; then
-  snap install intellij-idea-ultimate --classic
-  snap install pycharm-professional --classic
-  snap install phpstorm --classic
-  snap install clion --classic
-else
-  snap install intellij-idea-community --classic
-  snap install pycharm-community --classic
-fi
 
 # Install pip libs
 pip3 install selenium
@@ -101,6 +82,9 @@ echo "installed geckodriver binary in $install_dir"
 git clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime
 sh ~/.vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
 
+su c && git clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime \
+  && sh ~/.vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
+
 # Install dart
 apt -y update
 apt -y install apt-transport-https
@@ -109,11 +93,6 @@ sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debi
 apt -y update
 apt -y install dart
 export PATH="$PATH:/usr/lib/dart/bin"
-
-# signal
-curl -s https://updates.signal.org/desktop/apt/keys.asc | sudo apt-key add -
-  echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | sudo tee -a /etc/apt/sources.list.d/signal-xenial.list
-  sudo apt update && sudo apt install signal-desktop
 
 # last pass
 wget https://download.cloud.lastpass.com/linux/lplinux.tar.bz2
@@ -124,7 +103,19 @@ rm -r iplinux
 rm lplinux.tar.bz2
 
 mkdir /mnt/smbShare
-printf "\n//192.168.1.3/smbShare /mnt/smbShare cifs uid=0,credentials=/root/.smb,iocharset=utf8,vers=2.0,noperm 0 0" >> /etc/fstab
+printf "\n//192.168.1.2/smbShare /mnt/smbShare cifs uid=0,credentials=/root/.smb,iocharset=utf8,vers=2.0,noperm 0 0" >> /etc/fstab
+
+echo would you like to install professional jet brains products y/n
+read -r professional
+if [ "$professional" == y ]; then
+  snap install intellij-idea-ultimate --classic
+  snap install pycharm-professional --classic
+  snap install phpstorm --classic
+  snap install clion --classic
+else
+  snap install intellij-idea-community --classic
+  snap install pycharm-community --classic
+fi
 
 apt -y update
 apt -y upgrade

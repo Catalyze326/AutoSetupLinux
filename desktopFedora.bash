@@ -1,23 +1,24 @@
 #!/bin/bash
 if [[ $EUID -ne 0 ]]; then echo "This script must be run as root" ;exit 1; fi
 
-apt -y update
-apt -y upgrade
-apt -y install git
-apt -y install wget
-apt -y install curl
-apt -y install python3-pip
-apt -y install default-jdk
-apt -y install php
-apt -y install apache2
-apt -y install openssh-server
-apt -y install vim
-apt -y install net-tools
-apt -y install cifs-utils
+yum update -y
+yum upgrade -y
+yum install -y git
+yum install -y wget
+yum install -y curl
+yum install -y python3-pip
+yum install -y default-jdk
+yum install -y php
+yum install -y apache2
+yum install -y openssh-server
+yum install -y vim
+yum install -y net-tools
+yum -y install cifs-utils
 
 # Install pip libs
 pip3 install selenium
 
+# Get latest gekodriver
 install_dir="/usr/local/bin"
 json=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest)
 if [[ $(uname) == "Darwin" ]]; then
@@ -40,26 +41,10 @@ sh ~/.vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
 su c && git clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime \
   && sh ~/.vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all && exit
 
-# Install docker
-apt -y remove docker docker-engine docker.io containerd runc
-apt -y update
-sudo apt -y install \
-  apt-transport-https \
-  ca-certificates \
-  curl \
-  gnupg-agent \
-  software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-apt-key fingerprint 0EBFCD88
-sudo add-apt-repository \
- "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
- apt -y update
- apt -y install docker-ce docker-ce-cli containerd.io
-
 mkdir /mnt/smbShare
 printf "\n//192.168.1.2/smbShare /mnt/smbShare cifs uid=0,credentials=/root/.smb,iocharset=utf8,vers=2.0,noperm 0 0" >> /etc/fstab
 
-apt -y update
-apt -y upgrade
-apt -y full-upgrade
-apt -y autoremove
+yum -y update
+yum -y upgrade
+yum -y full-upgrade
+yum -y autoremove

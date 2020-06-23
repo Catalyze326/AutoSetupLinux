@@ -4,23 +4,15 @@ if [[ $EUID -ne 0 ]]; then echo "This script must be run as root" ;exit 1; fi
 yum -y update
 yum -y upgrade
 yum -y install git
-yum -y install mysql-server
 yum -y install wget
 yum -y install curl
 yum -y install python3-pip
-yum -y install python2-pip
 yum -y install default-jdk
-yum -y install php
-yum -y install apache2
 yum -y install firefox
 yum -y install openssh-server
-yum -y install kvm
 yum -y install vim
 yum -y install virtualbox
 yum -y install net-tools
-yum -y install gnome-tweak-tool
-yum -y install chrome-gnome-shell
-yum -y install gnome-tweak-tool
 yum -y install snapd
 yum -y install cifs-utils
 
@@ -92,6 +84,9 @@ echo "installed geckodriver binary in $install_dir"
 git clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime
 sh ~/.vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
 
+su c && git clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime \
+  && sh ~/.vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all && exit
+
 # Install dart
 yum -y install git subversion make gcc-c++
 git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
@@ -106,7 +101,8 @@ cd ..
 rm -r iplinux
 rm lplinux.tar.bz2
 
-printf "\n//192.168.1.3/smbShare /mnt/smbShare cifs uid=0,credentials=/root/.smb,iocharset=utf8,vers=2.0,noperm 0 0" >> /etc/fstab
+mkdir /mnt/smbShare
+printf "\n//192.168.1.2/smbShare /mnt/smbShare cifs uid=0,credentials=/root/.smb,iocharset=utf8,vers=2.0,noperm 0 0" >> /etc/fstab
 
 yum -y update
 yum -y upgrade
